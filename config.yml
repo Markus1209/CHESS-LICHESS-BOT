@@ -3,7 +3,7 @@ url: "https://lichess.org/"        # Lichess base URL.
 
 engine:                            # Engine settings.
   dir: "./engines/"                # Directory containing the engine. This can be an absolute path or one relative to lichess-bot/.
-  name: "engine_name"              # Binary name of the engine to use.
+  name: "buggy_engine"             # Binary name of the engine to use.
   working_dir: ""                  # Directory where the chess engine will read and write files. If blank or missing, the current directory is used.
                                    # NOTE: If working_dir is set, the engine will look for files and directories relative to this directory, not where lichess-bot was launched. Absolute paths are unaffected.
   protocol: "uci"                  # "uci", "xboard" or "homemade"
@@ -87,11 +87,11 @@ engine:                            # Engine settings.
 #   Hash: 256
 
   uci_options:                     # Arbitrary UCI options passed to the engine.
-    Move Overhead: 100             # Increase if your bot flags games too often.
     Threads: 4                     # Max CPU threads the engine can use.
     Hash: 512                      # Max memory (in megabytes) the engine can allocate.
-    SyzygyPath: "./syzygy/"        # Paths to Syzygy endgame tablebases that the engine reads.
-    UCI_ShowWDL: true              # Show the chance of the engine winning.
+#   SyzygyPath: "./syzygy/"        # Paths to Syzygy endgame tablebases that the engine reads.
+#   UCI_ShowWDL: true              # Show the chance of the engine winning.
+#   Move Overhead: 100             # Increase if your bot flags games too often.
 #   go_commands:                   # Additional options to pass to the UCI go command.
 #     nodes: 1                     # Search so many nodes only.
 #     depth: 5                     # Search depth ply only.
@@ -126,22 +126,22 @@ correspondence:
 
 challenge:                         # Incoming challenges.
   concurrency: 1                   # Number of games to play simultaneously.
-  sort_by: "best"                  # Possible values: "best" and "first".
-  preference: "none"               # Possible values: "none", "human", "bot".
-  accept_bot: true                 # Accepts challenges coming from other bots.
+  sort_by: "first"                 # Possible values: "best" and "first".
+  preference: "human"              # Possible values: "none", "human", "bot".
+  accept_bot: false                # Accepts challenges coming from other bots.
   only_bot: false                  # Accept challenges by bots only.
   max_increment: 20                # Maximum amount of increment to accept a challenge in seconds. The max is 180. Set to 0 for no increment.
   min_increment: 0                 # Minimum amount of increment to accept a challenge in seconds.
   max_base: 1800                   # Maximum amount of base time to accept a challenge in seconds. The max is 10800 (3 hours).
-  min_base: 0                      # Minimum amount of base time to accept a challenge in seconds.
+  min_base: 30                     # Minimum amount of base time to accept a challenge in seconds.
   max_days: 14                     # Maximum number of days per move to accept a challenge for a correspondence game.
                                    # Unlimited games can be accepted by removing this field or specifying .inf
   min_days: 1                      # Minimum number of days per move to accept a challenge for a correspondence game.
   variants:                        # Chess variants to accept (https://lichess.org/variant).
     - standard
-#   - fromPosition
 #   - antichess
 #   - atomic
+#   - fromPosition
 #   - chess960
 #   - crazyhouse
 #   - horde
@@ -156,7 +156,7 @@ challenge:                         # Incoming challenges.
 #   - correspondence
   modes:                           # Game modes to accept.
     - casual                       # Unrated games.
-    - rated                        # Rated games - must comment if the engine doesn't try to win.
+#   - rated                        # Rated games - must comment if the engine doesn't try to win.
 # block_list:                      # List of users from which the challenges are always declined.
 #   - user1
 #   - user2
@@ -177,8 +177,8 @@ greeting:
   hello_spectators: "Hi! I'm {me}. Type !help for a list of commands I can respond to." # Message to send to spectator chat at the start of a game
   goodbye_spectators: "Thanks for watching!" # Message to send to spectator chat at the end of a game
 
-# pgn_directory: "game_records"    # A directory where PGN-format records of the bot's games are kept
-# pgn_file_grouping: "game"        # How to group games into files. Options are "game", "opponent", and "all"
+pgn_directory: "game_records"      # A directory where PGN-format records of the bot's games are kept
+pgn_file_grouping: "opponent"      # How to group games into files. Options are "game", "opponent", and "all"
                                    # "game" (default) - every game is written to a different file named "{White name} vs. {Black name} - {lichess game ID}.pgn"
                                    # "opponent" - every game with a given opponent is written to a file named "{Bot name} games vs. {Opponent name}.pgn"
                                    # "all" - every game is written to a single file named "{Bot name} games.pgn"
@@ -202,7 +202,7 @@ matchmaking:
   opponent_rating_difference: 300  # The maximum difference in rating between the bot's rating and opponent's rating.
   rating_preference: "none"        # One of "none", "high", "low".
   opponent_allow_tos_violation: false # Set to 'true' to allow challenging bots that violated the Lichess Terms of Service.
-  challenge_mode: "random"         # Set it to the mode in which challenges are sent. Possible options are 'casual', 'rated' and 'random'.
+  challenge_mode: "casual"         # Set it to the mode in which challenges are sent. Possible options are 'casual', 'rated' and 'random'.
   challenge_filter: none           # If a bot declines a challenge, do not issue a similar challenge to that bot. Possible options are 'none', 'coarse', and 'fine'.
 # block_list:                      # The list of bots that will not be challenged
 #   - user1
